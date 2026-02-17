@@ -2642,15 +2642,16 @@ setTimeout(animateCounters, 900);
 })();
 </script>
 
-<!-- SMART DAMAGED PLATES MODULE -->
+<!-- SMART DAMAGED PLATES MODULE V2 -->
 <div class="card" id="smartDamagedModule">
   <div class="card-header">
     <div class="title-lg">Matrículas Averiadas (Carga Inteligente)</div>
   </div>
   <div class="card-content" style="position:relative;padding:16px;">
     <div class="group">
-      <label>Introduce listado (FORMATO: MATRICULA|DESCRIPCIÓN)</label>
-      <textarea id="damagedBulkInput" class="textarea" placeholder="1234ABC|Golpe lateral derecho\n5678DEF|Eje trasero dañado"></textarea>
+      <label>Formato: MATRICULA|DESCRIPCIÓN</label>
+      <textarea id="damagedBulkInput" class="textarea" 
+      placeholder="1234ABC|Golpe lateral derecho\n5678DEF|Eje trasero dañado"></textarea>
     </div>
     <div class="row">
       <button class="btn btn-primary" onclick="saveDamagedList()">Guardar listado</button>
@@ -2661,13 +2662,13 @@ setTimeout(animateCounters, 900);
 
 <script>
 (function(){
-  const STORAGE_KEY = "damaged_plates_map_v1";
+  const STORAGE_KEY = "damaged_plates_map_v2";
 
   function normalizePlate(p){
     return (p || "").toUpperCase().replace(/\s+/g,'').trim();
   }
 
-  function loadDamagedMap(){
+  function loadMap(){
     try{
       return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
     }catch(e){
@@ -2675,7 +2676,7 @@ setTimeout(animateCounters, 900);
     }
   }
 
-  function saveDamagedMap(map){
+  function saveMap(map){
     localStorage.setItem(STORAGE_KEY, JSON.stringify(map));
   }
 
@@ -2690,7 +2691,7 @@ setTimeout(animateCounters, 900);
       const desc = (parts[1] || "Averiada").trim();
       if(plate) map[plate] = desc;
     });
-    saveDamagedMap(map);
+    saveMap(map);
     alert("Listado guardado correctamente.");
   }
 
@@ -2700,30 +2701,42 @@ setTimeout(animateCounters, 900);
     alert("Listado eliminado.");
   }
 
-  // AUTO DETECTION DURING REGISTRATION
-  document.addEventListener("input", function(e){
-    const target = e.target;
-    if(!target) return;
-    if(target.tagName === "INPUT" && target.type === "text"){
-      const value = normalizePlate(target.value);
-      if(!value) return;
-      const map = loadDamagedMap();
-      if(map[value]){
-        // Try to auto-select broken state button
-        const brokenBtn = document.querySelector('[data-state="AVERIADA"], .state-broken');
-        if(brokenBtn){
-          brokenBtn.click();
-        }
+  // DETECCIÓN SOLO AL CONFIRMAR REGISTRO
+  document.addEventListener("click", function(e){
+    const btn = e.target.closest("button");
+    if(!btn) return;
 
-        // Try to autofill description textarea if exists
-        const descField = document.querySelector("textarea");
-        if(descField && !descField.value){
-          descField.value = map[value];
-        }
+    if(btn.classList.contains("btn-primary")){
+      setTimeout(()=>{
+        const records = document.querySelectorAll(".record");
+        if(!records.length) return;
 
-        target.classList.add("input-error");
-        setTimeout(()=>target.classList.remove("input-error"),1500);
-      }
+        const lastRecord = records[records.length - 1];
+        const plateEl = lastRecord.querySelector(".record-matricula, .mat");
+        if(!plateEl) return;
+
+        const plate = normalizePlate(plateEl.textContent);
+        const map = loadMap();
+
+        if(map[plate]){
+
+          lastRecord.classList.remove("state-empty","state-loaded");
+          lastRecord.classList.add("state-broken");
+
+          let content = lastRecord.querySelector(".record-content, .content");
+          if(content){
+            content.textContent = map[plate];
+          }else{
+            const div = document.createElement("div");
+            div.className = "record-content content";
+            div.textContent = map[plate];
+            lastRecord.appendChild(div);
+          }
+
+          lastRecord.classList.add("highlight-dup");
+          setTimeout(()=>lastRecord.classList.remove("highlight-dup"),1200);
+        }
+      },150);
     }
   });
 
