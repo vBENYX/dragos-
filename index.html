@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,7 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
         
         .glass-card {
@@ -17,7 +18,6 @@
             border: 1px solid rgba(229, 231, 235, 1);
         }
 
-        /* Apple Style Splash Screen */
         #splash-screen {
             position: fixed;
             inset: 0;
@@ -31,7 +31,7 @@
         }
 
         .apple-logo {
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: 800;
             color: #fff;
             letter-spacing: -0.05em;
@@ -40,196 +40,159 @@
             animation: appleIn 1.2s forwards cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        .apple-subtitle {
-            color: #888;
-            font-size: 0.9rem;
-            margin-top: 1rem;
-            opacity: 0;
-            animation: fadeIn 1s 0.5s forwards;
-        }
-
-        @keyframes appleIn {
-            to { opacity: 1; transform: scale(1); }
-        }
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
-        .main-content {
-            opacity: 0;
-            transition: opacity 0.5s ease-in;
-        }
-
-        .active-glow {
-            box-shadow: 0 0 20px rgba(79, 70, 229, 0.15);
-        }
+        @keyframes appleIn { to { opacity: 1; transform: scale(1); } }
+        
+        .main-content { opacity: 0; transition: opacity 0.5s ease-in; }
+        .active-glow { box-shadow: 0 0 30px rgba(79, 70, 229, 0.1); }
     </style>
 </head>
 <body class="bg-[#f5f5f7] min-h-screen pb-20">
 
-    <!-- Splash Screen -->
     <div id="splash-screen">
         <div class="apple-logo tracking-tighter">CODE</div>
-        <div class="apple-subtitle font-medium">P7 STELLANTIS</div>
+        <div class="text-[#888] text-sm mt-4 font-medium tracking-[0.3em] opacity-0 animate-[fadeIn_1s_0.6s_forwards]">P7 STELLANTIS</div>
     </div>
 
     <div id="app-content" class="main-content">
-        <!-- Header -->
         <nav class="bg-black text-white p-5 sticky top-0 z-50">
             <div class="max-w-4xl mx-auto flex justify-between items-center">
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-3">
                     <span class="font-extrabold text-xl tracking-tighter">CODE</span>
-                    <span class="text-xs font-light text-slate-400 border-l border-slate-700 pl-2">P7 STELLANTIS</span>
+                    <span class="text-[10px] font-medium text-slate-400 border-l border-slate-700 pl-3 tracking-widest uppercase">P7 Stellantis</span>
                 </div>
-                <div id="header-info" class="hidden text-[10px] font-mono bg-white/10 px-3 py-1 rounded-full">
-                    <span id="nav-truck-info"></span>
-                </div>
+                <button id="btn-change-shift" class="hidden text-[10px] font-bold bg-white/10 px-4 py-2 rounded-full hover:bg-white/20 transition-all uppercase tracking-wider">
+                    Cambiar Turno
+                </button>
             </div>
         </nav>
 
         <main class="max-w-4xl mx-auto p-4 space-y-6">
 
-            <!-- Vehicle Setup -->
-            <section id="vehicle-config" class="glass-card rounded-2xl p-6 shadow-sm">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-sm font-bold text-slate-400 uppercase tracking-widest">Configuración de Flota</h2>
-                    <button id="edit-vehicles-btn" class="text-indigo-600 text-xs font-semibold hidden underline underline-offset-4">Cambiar Vehículos</button>
-                </div>
-                
+            <!-- Configuration / Change Shift -->
+            <section id="setup-section" class="glass-card rounded-3xl p-8 shadow-sm">
+                <h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-6">Registro de Entrada / Turno</h2>
                 <form id="setup-form" class="space-y-4">
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-4">
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Matrícula Camión</label>
-                            <input type="text" id="truck-plate" required placeholder="0000-ABC" 
-                                class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-black outline-none uppercase font-mono transition-all">
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 ml-1">Nombre del Operario</label>
+                            <input type="text" id="user-name" required placeholder="Ingresa tu nombre" 
+                                class="w-full p-4 bg-slate-100 border-transparent border rounded-2xl focus:ring-2 focus:ring-black outline-none transition-all font-semibold">
                         </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Matrícula Remolque</label>
-                            <input type="text" id="trailer-plate" placeholder="R-0000-XYZ" 
-                                class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-black outline-none uppercase font-mono transition-all">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 ml-1">Camión</label>
+                                <input type="text" id="truck-plate" required placeholder="Matrícula" 
+                                    class="w-full p-4 bg-slate-100 border-transparent border rounded-2xl focus:ring-2 focus:ring-black outline-none uppercase font-mono transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 ml-1">Remolque</label>
+                                <input type="text" id="trailer-plate" placeholder="Matrícula R" 
+                                    class="w-full p-4 bg-slate-100 border-transparent border rounded-2xl focus:ring-2 focus:ring-black outline-none uppercase font-mono transition-all">
+                            </div>
                         </div>
                     </div>
-                    <button type="submit" class="w-full bg-black text-white font-bold py-4 rounded-2xl hover:bg-slate-800 transition-all shadow-lg">
+                    <button type="submit" class="w-full bg-black text-white font-bold py-4 rounded-2xl shadow-lg active:scale-[0.98] transition-all">
                         Iniciar Jornada
                     </button>
                 </form>
-
-                <div id="active-vehicles" class="hidden flex justify-around items-center bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                    <div class="text-center">
-                        <p class="text-[10px] text-slate-400 font-bold uppercase">Unidad Motora</p>
-                        <p id="display-truck" class="text-slate-900 font-bold font-mono text-lg"></p>
-                    </div>
-                    <div class="h-10 w-px bg-slate-200"></div>
-                    <div class="text-center">
-                        <p class="text-[10px] text-slate-400 font-bold uppercase">Remolque</p>
-                        <p id="display-trailer" class="text-slate-900 font-bold font-mono text-lg"></p>
-                    </div>
-                </div>
             </section>
+
+            <!-- Dashboard Info -->
+            <div id="dashboard-info" class="hidden glass-card rounded-2xl p-4 flex justify-between items-center text-[11px] font-bold uppercase text-slate-500 bg-white/50">
+                <div class="flex flex-col">
+                    <span class="text-[9px] text-slate-400">Operario</span>
+                    <span id="info-user" class="text-black"></span>
+                </div>
+                <div class="flex flex-col border-l pl-4">
+                    <span class="text-[9px] text-slate-400">Entrada</span>
+                    <span id="info-shift-start" class="text-black font-mono"></span>
+                </div>
+                <div class="flex flex-col border-l pl-4">
+                    <span class="text-[9px] text-slate-400">Vehículo</span>
+                    <span id="info-vehicle" class="text-black font-mono"></span>
+                </div>
+            </div>
 
             <!-- Active Trip Tracking -->
             <div id="active-trip-container" class="hidden">
-                <div class="bg-white border border-indigo-100 rounded-3xl p-6 shadow-xl active-glow relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-4">
-                        <div class="flex items-center gap-1.5 bg-indigo-50 text-indigo-600 text-[10px] font-bold px-3 py-1 rounded-full uppercase">
-                            <span class="w-1.5 h-1.5 bg-indigo-600 rounded-full animate-pulse"></span>
-                    En curso
+                <div class="bg-white border border-indigo-100 rounded-[2rem] p-8 shadow-xl active-glow relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-6">
+                        <div class="flex items-center gap-2 bg-indigo-50 text-indigo-600 text-[10px] font-bold px-4 py-1.5 rounded-full uppercase">
+                            <span class="w-2 h-2 bg-indigo-600 rounded-full animate-pulse"></span>
+                            En Tránsito
                         </div>
                     </div>
-
-                    <div class="space-y-6">
-                        <div class="flex items-start gap-4">
-                            <div class="w-8 flex flex-col items-center">
-                                <div class="w-3 h-3 rounded-full bg-slate-200"></div>
-                                <div class="w-0.5 h-16 bg-slate-100 border-l border-dashed border-slate-300"></div>
-                                <div class="w-3 h-3 rounded-full bg-indigo-600"></div>
+                    <div class="space-y-8">
+                        <div class="flex items-start gap-6">
+                            <div class="w-4 flex flex-col items-center">
+                                <div class="w-4 h-4 rounded-full border-2 border-slate-200 bg-white"></div>
+                                <div class="w-0.5 h-20 bg-slate-100 border-l-2 border-dashed border-slate-200 my-1"></div>
+                                <div class="w-4 h-4 rounded-full bg-indigo-600 ring-4 ring-indigo-50"></div>
                             </div>
-                            <div class="flex-1 space-y-6">
+                            <div class="flex-1 space-y-8 pt-0.5">
                                 <div>
-                                    <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Origen</p>
-                                    <p id="active-origin" class="text-lg font-bold text-slate-900"></p>
-                                    <p id="active-load-time" class="text-xs text-slate-500 font-mono"></p>
+                                    <p class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Carga</p>
+                                    <p id="active-origin" class="text-xl font-extrabold text-slate-900"></p>
+                                    <p id="active-load-time" class="text-xs text-slate-500 font-mono mt-1"></p>
                                 </div>
                                 <div>
-                                    <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Destino Final</p>
-                                    <p id="active-dest" class="text-lg font-bold text-slate-900"></p>
-                                    <p id="active-arrival-time" class="text-xs text-indigo-600 font-bold italic font-mono">Calculando llegada...</p>
+                                    <p class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Descarga</p>
+                                    <p id="active-dest" class="text-xl font-extrabold text-slate-900"></p>
+                                    <p id="active-arrival-time" class="text-xs text-indigo-600 font-bold italic font-mono mt-1">Pendiente...</p>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="flex gap-3">
-                            <button id="btn-arrive" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-2xl font-bold transition-all shadow-md active:scale-95">
-                                Registrar Llegada
-                            </button>
-                            <button id="btn-complete-descarga" class="flex-1 bg-slate-900 hover:bg-black text-white py-4 rounded-2xl font-bold transition-all shadow-md opacity-30 cursor-not-allowed active:scale-95" disabled>
-                                Descargado
-                            </button>
+                        <div class="flex gap-4 pt-4">
+                            <button id="btn-arrive" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-2xl font-bold transition-all shadow-md active:scale-95">Registrar Llegada</button>
+                            <button id="btn-complete" class="flex-1 bg-black text-white py-4 rounded-2xl font-bold transition-all shadow-md opacity-20 cursor-not-allowed active:scale-95" disabled>Descargado</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- New Load Form -->
-            <section id="record-section" class="hidden glass-card rounded-2xl p-6 shadow-sm">
-                <h2 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Nueva Carga</h2>
-                <form id="main-form" class="space-y-4">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Punto de Carga</label>
-                            <input type="text" id="input-origin" required placeholder="Lugar de origen" 
-                                class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Punto de Descarga</label>
-                            <input type="text" id="input-dest" required placeholder="Destino final" 
-                                class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none">
-                        </div>
+            <!-- New Trip Form -->
+            <section id="record-section" class="hidden glass-card rounded-3xl p-6 shadow-sm">
+                <h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-6">Nuevo Viaje</h2>
+                <form id="main-form" class="space-y-5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <input type="text" id="input-origin" required placeholder="Lugar de Carga" class="w-full p-4 bg-slate-100 border-transparent rounded-2xl focus:ring-2 focus:ring-black outline-none transition-all">
+                        <input type="text" id="input-dest" required placeholder="Lugar de Descarga" class="w-full p-4 bg-slate-100 border-transparent rounded-2xl focus:ring-2 focus:ring-black outline-none transition-all">
                     </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Referencia Carga / CMR</label>
-                        <input type="text" id="input-ref" placeholder="Ej: ST-2024-X" 
-                            class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none">
-                    </div>
-                    <button type="submit" class="w-full bg-black text-white font-bold py-4 rounded-2xl hover:bg-slate-800 transition-all shadow-lg active:scale-95">
-                        Iniciar Registro de Carga
-                    </button>
+                    <input type="text" id="input-ref" placeholder="Referencia / CMR (Opcional)" class="w-full p-4 bg-slate-100 border-transparent rounded-2xl focus:ring-2 focus:ring-black outline-none transition-all">
+                    <button type="submit" class="w-full bg-black text-white font-bold py-4 rounded-2xl shadow-lg hover:bg-slate-800 transition-all active:scale-[0.98]">Iniciar Carga</button>
                 </form>
             </section>
 
-            <!-- Weekly Log -->
-            <section id="history-section" class="hidden space-y-4">
+            <!-- History -->
+            <section id="history-section" class="hidden space-y-6">
                 <div class="flex justify-between items-end px-2">
                     <div>
-                        <h2 class="text-xl font-bold text-slate-900 tracking-tight">Historial de Viajes</h2>
-                        <p id="week-indicator" class="text-xs text-slate-500 font-medium"></p>
+                        <h2 class="text-2xl font-black text-slate-900 tracking-tighter">Historial</h2>
+                        <p id="week-indicator" class="text-[10px] text-slate-500 font-bold uppercase tracking-tighter"></p>
                     </div>
-                    <button id="download-pdf" class="flex items-center gap-2 bg-white border border-slate-200 text-slate-900 px-5 py-2.5 rounded-xl text-xs font-bold shadow-sm hover:bg-slate-50 transition-all">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                        PDF SEMANAL
-                    </button>
+                    <button id="download-pdf" class="bg-white border border-slate-200 text-black px-5 py-3 rounded-2xl text-[10px] font-black shadow-sm uppercase tracking-widest hover:bg-slate-50 transition-all">PDF Semanal</button>
                 </div>
-                <div id="history-list" class="space-y-3"></div>
-                <div id="history-empty" class="text-center py-20 bg-white rounded-3xl border border-dashed border-slate-300 text-slate-400 text-sm italic hidden">No se han registrado movimientos esta semana.</div>
+                <div id="history-list" class="space-y-4"></div>
+                <div id="history-empty" class="text-center py-20 text-slate-400 italic hidden">No hay viajes registrados.</div>
             </section>
 
         </main>
     </div>
 
-    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-8 py-4 rounded-2xl text-xs font-bold shadow-2xl transition-all opacity-0 translate-y-20 pointer-events-none z-[100] tracking-widest uppercase"></div>
+    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-black text-white px-10 py-4 rounded-2xl text-[10px] font-bold shadow-2xl transition-all opacity-0 translate-y-20 pointer-events-none z-[100] tracking-widest uppercase"></div>
 
     <script>
-        // State
         let state = {
+            user: '',
             truck: '',
             trailer: '',
+            shiftStartTime: '',
             activeTrip: null,
             records: []
         };
 
-        const KEY = 'code_p7_storage_v1';
+        const KEY = 'code_stellantis_v3';
 
-        // Helpers
         const getWeek = (d = new Date()) => {
             const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
             date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
@@ -250,28 +213,24 @@
             if (data) state = JSON.parse(data);
         };
 
-        // Splash screen animation
         window.addEventListener('load', () => {
             setTimeout(() => {
-                const splash = document.getElementById('splash-screen');
-                const app = document.getElementById('app-content');
-                splash.style.opacity = '0';
-                app.style.opacity = '1';
-                setTimeout(() => splash.style.display = 'none', 800);
-            }, 2500); // Duración de la presentación Apple
+                document.getElementById('splash-screen').style.opacity = '0';
+                document.getElementById('app-content').style.opacity = '1';
+                setTimeout(() => document.getElementById('splash-screen').style.display = 'none', 800);
+            }, 2500);
         });
 
         function render() {
-            if (state.truck) {
-                document.getElementById('setup-form').classList.add('hidden');
-                document.getElementById('active-vehicles').classList.remove('hidden');
-                document.getElementById('edit-vehicles-btn').classList.remove('hidden');
+            if (state.user && state.truck) {
+                document.getElementById('setup-section').classList.add('hidden');
+                document.getElementById('btn-change-shift').classList.remove('hidden');
+                document.getElementById('dashboard-info').classList.remove('hidden');
                 document.getElementById('history-section').classList.remove('hidden');
                 
-                document.getElementById('display-truck').innerText = state.truck;
-                document.getElementById('display-trailer').innerText = state.trailer || 'N/A';
-                document.getElementById('nav-truck-info').innerText = `${state.truck} / ${state.trailer || 'S/R'}`;
-                document.getElementById('header-info').classList.remove('hidden');
+                document.getElementById('info-user').innerText = state.user;
+                document.getElementById('info-shift-start').innerText = state.shiftStartTime;
+                document.getElementById('info-vehicle').innerText = `${state.truck} / ${state.trailer || '-'}`;
 
                 if (state.activeTrip) {
                     document.getElementById('record-section').classList.add('hidden');
@@ -280,23 +239,32 @@
                     document.getElementById('active-dest').innerText = state.activeTrip.dest;
                     document.getElementById('active-load-time').innerText = "Cargado: " + state.activeTrip.loadTime;
                     
+                    const btnArrive = document.getElementById('btn-arrive');
+                    const btnComplete = document.getElementById('btn-complete');
+                    const arrivalTxt = document.getElementById('active-arrival-time');
+
                     if (state.activeTrip.arrivalTime) {
-                        document.getElementById('active-arrival-time').innerText = "Llegada: " + state.activeTrip.arrivalTime;
-                        document.getElementById('btn-arrive').classList.add('opacity-30', 'cursor-not-allowed');
-                        document.getElementById('btn-arrive').disabled = true;
-                        document.getElementById('btn-complete-descarga').classList.remove('opacity-30', 'cursor-not-allowed');
-                        document.getElementById('btn-complete-descarga').disabled = false;
+                        arrivalTxt.innerText = "Llegada: " + state.activeTrip.arrivalTime;
+                        btnArrive.classList.add('opacity-20', 'cursor-not-allowed');
+                        btnArrive.disabled = true;
+                        btnComplete.classList.remove('opacity-20', 'cursor-not-allowed');
+                        btnComplete.disabled = false;
                     } else {
-                        document.getElementById('active-arrival-time').innerText = "En tránsito...";
-                        document.getElementById('btn-arrive').classList.remove('opacity-30', 'cursor-not-allowed');
-                        document.getElementById('btn-arrive').disabled = false;
-                        document.getElementById('btn-complete-descarga').classList.add('opacity-30', 'cursor-not-allowed');
-                        document.getElementById('btn-complete-descarga').disabled = true;
+                        arrivalTxt.innerText = "En tránsito...";
+                        btnArrive.classList.remove('opacity-20', 'cursor-not-allowed');
+                        btnArrive.disabled = false;
+                        btnComplete.classList.add('opacity-20', 'cursor-not-allowed');
+                        btnComplete.disabled = true;
                     }
                 } else {
                     document.getElementById('record-section').classList.remove('hidden');
                     document.getElementById('active-trip-container').classList.add('hidden');
                 }
+            } else {
+                document.getElementById('setup-section').classList.remove('hidden');
+                document.getElementById('btn-change-shift').classList.add('hidden');
+                document.getElementById('dashboard-info').classList.add('hidden');
+                document.getElementById('record-section').classList.add('hidden');
             }
             renderHistory();
         }
@@ -304,10 +272,12 @@
         function renderHistory() {
             const list = document.getElementById('history-list');
             const empty = document.getElementById('history-empty');
-            const currentWeek = getWeek();
-            document.getElementById('week-indicator').innerText = "Calendario Semanal: " + currentWeek;
+            const weekIndicator = document.getElementById('week-indicator');
+            const curWeek = getWeek();
+            weekIndicator.innerText = "Semana " + curWeek.split('-W')[1];
             
-            const weekRecords = state.records.filter(r => r.week === currentWeek);
+            const weekRecords = state.records.filter(r => r.week === curWeek)
+                .sort((a, b) => b.timestamp - a.timestamp);
 
             if (weekRecords.length === 0) {
                 list.innerHTML = '';
@@ -317,75 +287,70 @@
 
             empty.classList.add('hidden');
             list.innerHTML = weekRecords.map(r => `
-                <div class="glass-card p-5 rounded-2xl shadow-sm border-l-4 border-black">
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="text-[9px] font-black bg-black text-white px-2 py-0.5 rounded tracking-widest uppercase">Viaje Finalizado</span>
+                <div class="glass-card p-6 rounded-2xl shadow-sm border-l-4 border-black">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-[9px] font-black bg-black text-white px-2 py-0.5 rounded tracking-widest uppercase">${r.user}</span>
                         <span class="text-[10px] text-slate-400 font-mono">${r.date}</span>
                     </div>
                     <div class="flex items-center gap-4">
                         <div class="flex-1">
-                            <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">De</p>
+                            <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Carga</p>
                             <p class="text-sm font-extrabold text-slate-900">${r.origin}</p>
                             <p class="text-[10px] text-slate-500 font-mono">${r.loadTime}</p>
                         </div>
-                        <div class="flex items-center">
-                            <div class="w-1.5 h-1.5 rounded-full bg-slate-200"></div>
-                            <div class="w-8 h-px bg-slate-200"></div>
-                            <div class="w-1.5 h-1.5 rounded-full bg-black"></div>
-                        </div>
+                        <div class="h-px flex-1 bg-slate-100 relative"><div class="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-black"></div></div>
                         <div class="flex-1 text-right">
-                            <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">A</p>
+                            <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Descarga</p>
                             <p class="text-sm font-extrabold text-slate-900">${r.dest}</p>
-                            <p class="text-[10px] text-black font-bold font-mono">${r.unloadTime}</p>
+                            <p class="text-[10px] text-indigo-600 font-bold font-mono">${r.unloadTime}</p>
                         </div>
                     </div>
-                    <div class="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center">
-                        <div class="flex gap-4">
-                            <span class="text-[9px] text-slate-400 uppercase font-bold tracking-tighter">Ref: <b class="text-slate-800">${r.ref || '-'}</b></span>
-                            <span class="text-[9px] text-slate-400 uppercase font-bold tracking-tighter">T: <b class="text-slate-800">${r.truck}</b></span>
-                            <span class="text-[9px] text-slate-400 uppercase font-bold tracking-tighter">R: <b class="text-slate-800">${r.trailer || '-'}</b></span>
-                        </div>
-                        <button onclick="deleteRecord(${r.id})" class="text-slate-300 hover:text-red-500 transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                        </button>
+                    <div class="mt-4 pt-3 border-t flex justify-between items-center">
+                        <span class="text-[9px] text-slate-400 font-bold uppercase tracking-tighter">REF: ${r.ref || '-'}</span>
+                        <button onclick="deleteRecord(${r.id})" class="text-slate-300 hover:text-red-500 transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
                     </div>
                 </div>
             `).join('');
         }
 
-        // Handlers
         document.getElementById('setup-form').onsubmit = (e) => {
             e.preventDefault();
-            state.truck = document.getElementById('truck-plate').value.toUpperCase();
-            state.trailer = document.getElementById('trailer-plate').value.toUpperCase();
+            const now = new Date();
+            state.user = document.getElementById('user-name').value.trim();
+            state.truck = document.getElementById('truck-plate').value.toUpperCase().trim();
+            state.trailer = document.getElementById('trailer-plate').value.toUpperCase().trim();
+            state.shiftStartTime = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             save();
             render();
-            showToast("VEHÍCULO CONFIGURADO");
+            showToast("JORNADA INICIADA");
         };
 
-        document.getElementById('edit-vehicles-btn').onclick = () => {
-            document.getElementById('setup-form').classList.remove('hidden');
-            document.getElementById('active-vehicles').classList.add('hidden');
-            document.getElementById('edit-vehicles-btn').classList.add('hidden');
+        document.getElementById('btn-change-shift').onclick = () => {
+            if(confirm("¿Deseas finalizar el turno actual e iniciar uno nuevo?")) {
+                state.user = '';
+                state.shiftStartTime = '';
+                state.activeTrip = null;
+                save();
+                render();
+            }
         };
 
         document.getElementById('main-form').onsubmit = (e) => {
             e.preventDefault();
             const now = new Date();
             state.activeTrip = {
-                origin: document.getElementById('input-origin').value,
-                dest: document.getElementById('input-dest').value,
-                ref: document.getElementById('input-ref').value,
+                origin: document.getElementById('input-origin').value.trim(),
+                dest: document.getElementById('input-dest').value.trim(),
+                ref: document.getElementById('input-ref').value.trim(),
                 timestamp: now.getTime(),
                 loadTime: now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
                 arrivalTime: null,
-                truck: state.truck,
-                trailer: state.trailer
+                user: state.user
             };
             e.target.reset();
             save();
             render();
-            showToast("CARGA INICIADA");
+            showToast("VIAJE INICIADO");
         };
 
         document.getElementById('btn-arrive').onclick = () => {
@@ -395,26 +360,27 @@
             showToast("LLEGADA REGISTRADA");
         };
 
-        document.getElementById('btn-complete-descarga').onclick = () => {
+        document.getElementById('btn-complete').onclick = () => {
             const now = new Date();
             const record = {
                 id: Date.now(),
-                timestamp: state.activeTrip.timestamp, // Guardamos timestamp original para orden
+                timestamp: state.activeTrip.timestamp,
                 date: now.toLocaleDateString('es-ES'),
                 week: getWeek(now),
+                user: state.user,
                 origin: state.activeTrip.origin,
                 dest: state.activeTrip.dest,
                 loadTime: state.activeTrip.loadTime,
                 unloadTime: now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
                 ref: state.activeTrip.ref,
-                truck: state.activeTrip.truck,
-                trailer: state.activeTrip.trailer
+                truck: state.truck,
+                trailer: state.trailer
             };
-            state.records.unshift(record);
+            state.records.push(record);
             state.activeTrip = null;
             save();
             render();
-            showToast("VIAJE FINALIZADO");
+            showToast("VIAJE COMPLETADO");
         };
 
         function deleteRecord(id) {
@@ -425,51 +391,65 @@
             }
         }
 
-        // PDF Generation
         document.getElementById('download-pdf').onclick = () => {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('l', 'mm', 'a4');
-            const currentWeek = getWeek();
+            const curWeek = getWeek();
             
-            // Ordenamos CRONOLÓGICAMENTE (del más antiguo al más nuevo)
-            const weekRecords = state.records
-                .filter(r => r.week === currentWeek)
-                .sort((a, b) => a.timestamp - b.timestamp);
+            // Agrupar por usuario
+            const recordsByShift = state.records
+                .filter(r => r.week === curWeek)
+                .sort((a, b) => a.timestamp - b.timestamp)
+                .reduce((acc, r) => {
+                    if (!acc[r.user]) acc[r.user] = [];
+                    acc[r.user].push(r);
+                    return acc;
+                }, {});
 
-            doc.setFontSize(16);
-            doc.setTextColor(0,0,0);
-            doc.text('CODE P7 STELLANTIS', 14, 15);
-            
-            doc.setFontSize(9);
+            doc.setFontSize(22);
+            doc.text('CODE P7 STELLANTIS', 14, 20);
+            doc.setFontSize(10);
             doc.setTextColor(100);
-            doc.text(`REGISTRO CRONOLÓGICO SEMANAL - ${currentWeek}`, 14, 22);
-            doc.text(`Vehículo: ${state.truck} | Remolque: ${state.trailer || 'N/A'}`, 14, 27);
+            doc.text(`BITÁCORA SEMANAL · SEMANA ${curWeek.split('-W')[1]} · ${curWeek.split('-W')[0]}`, 14, 28);
 
-            const tableBody = weekRecords.map(r => [
-                r.date,
-                r.origin,
-                r.loadTime,
-                r.dest,
-                r.unloadTime,
-                r.ref || '-',
-                r.truck,
-                r.trailer || '-'
-            ]);
+            let currentY = 35;
 
-            doc.autoTable({
-                startY: 35,
-                head: [['Fecha', 'Carga (Origen)', 'Salida', 'Descarga (Destino)', 'Llegada', 'Ref/CMR', 'Camión', 'Remolque']],
-                body: tableBody,
-                headStyles: { fillStyle: [0, 0, 0], textColor: [255,255,255], fontStyle: 'bold' },
-                alternateRowStyles: { fillStyle: [248, 248, 250] },
-                styles: { fontSize: 8, cellPadding: 4 },
-                margin: { left: 14, right: 14 }
+            Object.keys(recordsByShift).forEach(user => {
+                // Header del Operario
+                doc.setFillColor(245, 245, 247);
+                doc.rect(14, currentY, 269, 10, 'F');
+                doc.setFontSize(11);
+                doc.setTextColor(0);
+                doc.setFont(undefined, 'bold');
+                doc.text(`OPERARIO: ${user.toUpperCase()}`, 18, currentY + 7);
+                
+                const tableBody = recordsByShift[user].map(r => [
+                    r.date,
+                    r.origin,
+                    r.loadTime,
+                    r.dest,
+                    r.unloadTime,
+                    r.ref || '-',
+                    r.truck,
+                    r.trailer || '-'
+                ]);
+
+                doc.autoTable({
+                    startY: currentY + 12,
+                    head: [['Fecha', 'Carga (Origen)', 'H. Carga', 'Descarga (Destino)', 'H. Llegada', 'Ref/CMR', 'Camión', 'Remolque']],
+                    body: tableBody,
+                    headStyles: { fillStyle: [0, 0, 0], fontSize: 8, fontStyle: 'bold' },
+                    styles: { fontSize: 8, cellPadding: 3 },
+                    margin: { left: 14, right: 14 },
+                    theme: 'grid'
+                });
+
+                currentY = doc.lastAutoTable.finalY + 15;
             });
 
-            doc.save(`CODE_P7_STELLANTIS_${currentWeek}.pdf`);
+            doc.save(`CODE_STELLANTIS_${curWeek}.pdf`);
         };
 
-        // Initialize
         load();
         render();
     </script>
