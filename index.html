@@ -1868,7 +1868,286 @@ label, .label, .meta .item{
  font-size:13px !important;
 }
 </style>
-</head>
+
+<style id="xpo-refinement-layer">
+  :root {
+    --accent:#0A84FF;
+    --bg:#EEF3F8;
+    --panel:#FFFFFF;
+    --line:rgba(17,24,39,.09);
+    --text:#101418;
+    --muted:#68717C;
+    --radius:22px;
+    --shadow-1:0 22px 70px rgba(9, 30, 66, .12);
+    --shadow-2:0 12px 34px rgba(9, 30, 66, .10);
+    --glass:rgba(255,255,255,.78);
+    --ok:#22C55E;
+  }
+
+  html {
+    min-height:100%;
+    background:
+      radial-gradient(circle at 14% 4%, rgba(10,132,255,.18), transparent 30%),
+      radial-gradient(circle at 88% 0%, rgba(229,57,53,.12), transparent 28%),
+      linear-gradient(180deg,#f8fbff 0%, #eef3f8 42%, #e9eef5 100%);
+  }
+
+  body {
+    min-height:100%;
+    margin:0;
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Inter",system-ui,sans-serif;
+    background:transparent;
+  }
+
+  body::before {
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background-image:linear-gradient(rgba(16,20,24,.028) 1px, transparent 1px), linear-gradient(90deg, rgba(16,20,24,.022) 1px, transparent 1px);
+    background-size:36px 36px;
+    mask-image:linear-gradient(to bottom, rgba(0,0,0,.75), transparent 76%);
+  }
+
+  .app {
+    max-width:1120px;
+    padding:calc(22px + env(safe-area-inset-top)) clamp(14px, 3vw, 30px) calc(34px + env(safe-area-inset-bottom));
+  }
+
+  .header {
+    top:14px;
+    padding:22px clamp(18px, 3vw, 30px);
+    border-radius:28px;
+    border:1px solid rgba(255,255,255,.74);
+    background:linear-gradient(135deg, rgba(255,255,255,.88), rgba(255,255,255,.62));
+    box-shadow:0 24px 70px rgba(10,25,60,.14), inset 0 1px 0 rgba(255,255,255,.88);
+  }
+
+  .header::before {
+    background:
+      linear-gradient(90deg, rgba(229,57,53,.12), rgba(10,132,255,.13), transparent 74%),
+      linear-gradient(180deg, rgba(255,255,255,.54), transparent 72%);
+  }
+
+  .brand { position:relative; z-index:1; gap:12px; }
+
+  .chip {
+    border-radius:14px;
+    padding:7px 12px;
+    letter-spacing:.07em;
+    background:rgba(255,255,255,.76);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.76), 0 10px 26px rgba(10,25,60,.08);
+  }
+
+  .logo-line {
+    margin-top:2px;
+    font-size:clamp(25px, 3.9vw, 34px);
+    letter-spacing:-.03em;
+  }
+
+  .logo-xpo { color:#D92727; text-shadow:0 10px 24px rgba(217,39,39,.16); }
+  .logo-log { color:#101418; }
+
+  .headline {
+    position:relative;
+    z-index:1;
+    margin-top:8px;
+    color:#2F3742;
+    font-size:clamp(19px, 3vw, 25px);
+    letter-spacing:-.015em;
+  }
+
+  .card, .panel, .compact, .modal-card {
+    border:1px solid rgba(255,255,255,.72);
+    background:rgba(255,255,255,.86);
+    box-shadow:0 18px 54px rgba(10,25,60,.11), inset 0 1px 0 rgba(255,255,255,.86);
+    backdrop-filter:saturate(1.2) blur(18px);
+  }
+
+  .card {
+    border-radius:28px;
+    margin:22px 0;
+  }
+
+  .card:hover { transform:translateY(-2px); box-shadow:0 24px 68px rgba(10,25,60,.15), inset 0 1px 0 rgba(255,255,255,.9); }
+
+  .card-header, .compact-header {
+    padding:15px 18px;
+    background:linear-gradient(180deg, rgba(255,255,255,.82), rgba(255,255,255,.38));
+    border-bottom:1px solid rgba(17,24,39,.08);
+  }
+
+  .title-lg, .section-title, .modal-title {
+    font-weight:760;
+    letter-spacing:-.02em;
+  }
+
+  .card-content { min-height:275px; }
+
+  .screen { padding:24px 18px 22px; gap:15px; }
+
+  .dot {
+    width:9px;
+    height:9px;
+    background:#C8D0DA;
+    transform:none;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.04);
+  }
+
+  .dot.active {
+    width:30px;
+    background:linear-gradient(90deg,#0A84FF,#5CB3FF);
+    box-shadow:0 7px 18px rgba(10,132,255,.28);
+  }
+
+  .meta {
+    gap:8px 12px;
+  }
+
+  .meta .item {
+    color:#66707C;
+    background:rgba(245,247,250,.72);
+    border:1px solid rgba(17,24,39,.06);
+    border-radius:999px;
+    padding:6px 10px;
+  }
+
+  .meta strong { color:#121820; }
+
+  .input, .textarea, select {
+    max-width:590px;
+    border-radius:16px;
+    border:1px solid rgba(20,28,38,.10);
+    background:rgba(255,255,255,.92);
+    color:#121820;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.78), 0 6px 18px rgba(10,25,60,.05);
+  }
+
+  .input::placeholder, .textarea::placeholder { color:#8A929C; }
+
+  .input:focus, .textarea:focus, select:focus {
+    border-color:rgba(10,132,255,.72);
+    box-shadow:0 0 0 5px rgba(10,132,255,.13), 0 12px 30px rgba(10,25,60,.08);
+  }
+
+  .btn, .action-btn {
+    border-radius:15px;
+    border:1px solid rgba(17,24,39,.08);
+    background:linear-gradient(180deg,#FFFFFF,#F1F4F8);
+    box-shadow:0 10px 24px rgba(10,25,60,.09), inset 0 1px 0 rgba(255,255,255,.78);
+    font-weight:650;
+    letter-spacing:-.01em;
+  }
+
+  .btn:hover, .action-btn:hover {
+    background:linear-gradient(180deg,#FFFFFF,#E9EEF5);
+    transform:translateY(-1px);
+  }
+
+  .btn-primary {
+    background:linear-gradient(135deg,#0679F2,#35A2FF);
+    border-color:rgba(255,255,255,.3);
+    color:#fff;
+    box-shadow:0 14px 34px rgba(10,132,255,.28), inset 0 1px 0 rgba(255,255,255,.28);
+  }
+
+  .btn-primary:hover { filter:none; background:linear-gradient(135deg,#006FE6,#2499FF); }
+
+  .btn-secondary { background:linear-gradient(180deg,#F9FAFC,#EEF2F7); }
+
+  .row.states { gap:12px; max-width:590px; }
+
+  .row.states .btn {
+    min-height:48px;
+  }
+
+  #btnCargada { color:#056B53; }
+  #btnVacia { color:#1558B0; }
+  #btnAveriada { color:#865A00; }
+
+  .panel {
+    border-radius:28px;
+    padding:22px;
+  }
+
+  .pills { gap:14px; grid-template-columns:repeat(auto-fit,minmax(235px,1fr)); }
+
+  .pill {
+    border-radius:20px;
+    padding:15px 16px;
+    border:1px solid rgba(17,24,39,.07);
+    background:linear-gradient(180deg, rgba(255,255,255,.95), rgba(246,248,251,.86));
+  }
+
+  .pill::before { background:linear-gradient(90deg, rgba(10,132,255,.12), rgba(10,132,255,.26)); }
+  .pill .label { font-weight:680; color:#26303B; }
+  .pill .val { font-size:18px; color:#0878EA; }
+
+  .compact { border-radius:28px; overflow:hidden; }
+  .compact-header { top:14px; padding:12px; }
+
+  .segment { gap:8px; }
+
+  .segment button {
+    padding:8px 13px;
+    border-radius:999px;
+    border-color:rgba(17,24,39,.08);
+    background:rgba(255,255,255,.78);
+    font-weight:680;
+  }
+
+  .segment button.active {
+    background:rgba(10,132,255,.12);
+    border-color:rgba(10,132,255,.38);
+    box-shadow:0 8px 24px rgba(10,132,255,.12), inset 0 0 0 1px rgba(255,255,255,.7);
+  }
+
+  .segment .badge {
+    background:rgba(10,132,255,.11);
+    color:#066BD1;
+    font-weight:760;
+  }
+
+  .record {
+    border-radius:18px;
+    padding:14px;
+    border:1px solid rgba(17,24,39,.08);
+    background:rgba(255,255,255,.88);
+    box-shadow:0 10px 28px rgba(10,25,60,.07);
+  }
+
+  .record:hover { transform:translateY(-1px); box-shadow:0 14px 34px rgba(10,25,60,.10); }
+
+  .actions { gap:8px; }
+  .action-btn { padding:9px 12px; }
+  .action-btn.danger, .danger { color:#B42318; background:linear-gradient(180deg,#FFF8F7,#FCEBEA); }
+
+  .toast {
+    top:18px;
+    border-radius:16px;
+    background:linear-gradient(135deg,#1FB65A,#34D275);
+    box-shadow:0 18px 44px rgba(19,125,64,.24);
+  }
+
+  .modal { background:rgba(7,12,20,.28); backdrop-filter:blur(8px); }
+  .modal-card { border-radius:26px; padding:18px; }
+
+  .list-body::before { background:linear-gradient(to bottom, rgba(238,243,248,1), rgba(238,243,248,0)); }
+  .list-body::after { background:linear-gradient(to top, rgba(238,243,248,1), rgba(238,243,248,0)); }
+
+  @media (max-width:700px) {
+    .app { padding-inline:12px; }
+    .header { border-radius:24px; padding:18px 14px; }
+    .card, .panel, .compact { border-radius:24px; }
+    .card-content { min-height:292px; }
+    .screen { padding-inline:14px; }
+    .row.states { grid-template-columns:1fr; }
+    .segment button { justify-content:center; }
+    .record { grid-template-columns:1fr; }
+    .actions { justify-content:flex-start; flex-wrap:wrap; }
+  }
+</style></head>
 <body>
 <div class="di-hidden" id="dynamicIsland"><span id="diText">Acción completada</span><div class="bar" id="diBar"></div></div>
 <div class="app">
@@ -2641,97 +2920,6 @@ setTimeout(animateCounters, 900);
  }
 })();
 </script>
-
-<script>
-(function(){
-  const STORAGE_KEY = "xpo_user_name";
-
-  function getUserName(){
-    return localStorage.getItem(STORAGE_KEY) || "";
-  }
-
-  function askUserName(callback){
-    let name = getUserName();
-    if(name){
-      callback(name);
-      return;
-    }
-
-    const modal = document.createElement("div");
-    modal.style.position="fixed";
-    modal.style.inset="0";
-    modal.style.background="rgba(0,0,0,0.25)";
-    modal.style.display="flex";
-    modal.style.alignItems="center";
-    modal.style.justifyContent="center";
-    modal.style.zIndex="9999";
-
-    modal.innerHTML = `
-      <div style="
-        background:rgba(255,255,255,0.95);
-        backdrop-filter:blur(20px);
-        border-radius:18px;
-        padding:20px;
-        width:min(90%,320px);
-        box-shadow:0 20px 60px rgba(0,0,0,0.25);
-        font-family:-apple-system;
-      ">
-        <div style="font-weight:600;margin-bottom:10px;">¿Quién realiza el recuento?</div>
-        <input id="xpoNameInput" placeholder="Nombre"
-          style="width:100%;padding:10px;border-radius:10px;border:1px solid #ddd;margin-bottom:12px;">
-        <button id="xpoSaveName"
-          style="width:100%;padding:10px;border-radius:10px;background:#0A84FF;color:white;border:none;">
-          Continuar
-        </button>
-      </div>
-    `;
-
-    document.body.appendChild(modal);
-
-    modal.querySelector("#xpoSaveName").onclick = function(){
-      const val = modal.querySelector("#xpoNameInput").value.trim();
-      if(!val) return;
-      localStorage.setItem(STORAGE_KEY, val);
-      document.body.removeChild(modal);
-      callback(val);
-    };
-  }
-
-  // Intercept PDF generation
-  document.addEventListener("click", function(e){
-    const btn = e.target.closest("button");
-    if(!btn) return;
-
-    if(btn.innerText.toLowerCase().includes("pdf")){
-      e.preventDefault();
-      e.stopPropagation();
-
-      askUserName(function(name){
-        // Hook jsPDF
-        const oldSave = window.jspdfSaveWrapped;
-        if(!oldSave){
-          window.jspdfSaveWrapped = true;
-
-          const { jsPDF } = window.jspdf;
-
-          const original = jsPDF.prototype.save;
-          jsPDF.prototype.save = function(...args){
-            try{
-              this.setFontSize(10);
-              this.text("Recuento: " + name, 10, 10);
-            }catch(e){}
-            return original.apply(this, args);
-          };
-        }
-
-        btn.click(); // re-trigger
-      });
-    }
-  }, true);
-
-})();
-</script>
-
 </body>
 </html>
 <style>
