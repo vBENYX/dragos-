@@ -2292,7 +2292,7 @@ function generatePDF(){
  doc.setTextColor(120,124,130);
  doc.text(regLabel,18,15);
  doc.setFont('helvetica','bold');
- doc.setFontSize(9);
+ doc.setFontSize(9.2);
  doc.setTextColor(35,35,38);
  doc.text(regName,18,20);
 
@@ -2335,15 +2335,15 @@ function generatePDF(){
  currentY+=8;
  if(leftData.length>0){
  doc.setFillColor(...SOFT); doc.rect(leftX,currentY-4,columnWidth,7,'F');
- doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...MUTED);
+ doc.setFont('helvetica','bold'); doc.setFontSize(9.2); doc.setTextColor(...MUTED);
  doc.text('MATRÍCULA',leftX+2,currentY); doc.text('CONTENIDO',leftX+35,currentY);
  }
  if(rightData.length>0){
  doc.setFillColor(...SOFT); doc.rect(rightX,currentY-4,columnWidth,7,'F');
- doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...MUTED);
+ doc.setFont('helvetica','bold'); doc.setFontSize(9.2); doc.setTextColor(...MUTED);
  doc.text('MATRÍCULA',rightX+2,currentY);
  }
- currentY+=8; doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(...TEXT);
+ currentY+=8; doc.setFont('helvetica','normal'); doc.setFontSize(8.2); doc.setTextColor(...TEXT);
  const maxRows=Math.max(leftData.length,rightData.length);
  for(let i=0;i<maxRows;i++){
  if(i%2===0){
@@ -2368,8 +2368,8 @@ function generatePDF(){
  let currentY=startY; if(data.length===0) return currentY;
  doc.setFont('helvetica','bold'); doc.setFontSize(12); doc.setTextColor(...TEXT); doc.text((title+' ('+data.length+')').toUpperCase(),15,currentY); currentY+=8;
  doc.setFillColor(...SOFT); doc.rect(15,currentY-4,180,7,'F');
- doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...MUTED); doc.text('MATRÍCULA',17,currentY); doc.text('DESCRIPCIÓN',70,currentY); currentY+=8;
- doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(...TEXT);
+ doc.setFont('helvetica','bold'); doc.setFontSize(9.2); doc.setTextColor(...MUTED); doc.text('MATRÍCULA',17,currentY); doc.text('DESCRIPCIÓN',70,currentY); currentY+=8;
+ doc.setFont('helvetica','normal'); doc.setFontSize(8.2); doc.setTextColor(...TEXT);
  data.forEach((platform,index)=>{
  if(index%2===0){doc.setFillColor(252,253,255);doc.rect(15,currentY-3,180,6,'F');}
  doc.text(platform.matricula.toUpperCase(),17,currentY);
@@ -2387,7 +2387,7 @@ function generatePDF(){
  if(averiadas.length>0){ yPosition=createSingleTable('PLATAFORMAS AVERIADAS',averiadas,yPosition); }
  const pageCount=doc.internal.getNumberOfPages();
  for(let i=1;i<=pageCount;i++){
- doc.setPage(i); doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(100,100,110);
+ doc.setPage(i); doc.setFont('helvetica','normal'); doc.setFontSize(8.2); doc.setTextColor(100,100,110);
  doc.text('© 2026 XPO LOGISTICS – Informe interno',20,285);
  doc.setTextColor(60,90,180);
  doc.textWithLink('CODE.COM', 105, 285, { url: 'https://vbenyx.github.io/XPO/', align: 'center' });
