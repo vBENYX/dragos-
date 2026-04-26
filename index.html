@@ -2281,13 +2281,20 @@ function generatePDF(){
  // Cabecera
  doc.setFillColor(...PANEL); doc.roundedRect(10,8,190,36,5,5,'F');
  doc.setDrawColor(...LINE); doc.roundedRect(10,8,190,36,5,5); doc.setDrawColor(210,210,214); doc.line(10,44,200,44);
- // Píldora registrador estilo Apple
- const regTxt='Registro: ' + registrador;
- doc.setFont('helvetica','bold'); doc.setFontSize(8);
- const regW=Math.min(52, doc.getTextWidth(regTxt)+8);
- doc.setFillColor(245,246,247); doc.roundedRect(14,12,regW,8,4,4,'F');
- doc.setDrawColor(225,226,230); doc.roundedRect(14,12,regW,8,4,4);
- doc.setTextColor(90,94,100); doc.text(regTxt, 18, 17);
+ // Etiqueta premium minimal registrador
+ const regLabel='REGISTRADO POR';
+ const regName=registrador.toUpperCase();
+ doc.setDrawColor(210,210,214);
+ doc.setLineWidth(0.6);
+ doc.line(14,12,14,22);
+ doc.setFont('helvetica','bold');
+ doc.setFontSize(6.5);
+ doc.setTextColor(120,124,130);
+ doc.text(regLabel,18,15);
+ doc.setFont('helvetica','bold');
+ doc.setFontSize(9);
+ doc.setTextColor(35,35,38);
+ doc.text(regName,18,20);
 
  doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(40,40,40); doc.text('CODE', 195, 14, { align: 'right' });
  doc.setFont('helvetica','bold'); doc.setFontSize(18);
