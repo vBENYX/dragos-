@@ -2268,6 +2268,8 @@ function resetFlow(){
 }
 function flashSuccess(){ const active = document.querySelector('.screen.active'); if(active){ active.classList.remove('flash-once'); void active.offsetWidth; active.classList.add('flash-once'); } toast('Registro guardado'); }
 function generatePDF(){
+ const registrador = (prompt('Nombre de quien realizó el registro:','') || '').trim();
+ if(!registrador){ return; }
  const { jsPDF } = window.jspdf || {};
  if(!jsPDF){ alert('No se pudo cargar jsPDF. Revisa tu conexión.'); return; }
  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
@@ -2279,6 +2281,14 @@ function generatePDF(){
  // Cabecera
  doc.setFillColor(...PANEL); doc.roundedRect(10,8,190,36,5,5,'F');
  doc.setDrawColor(...LINE); doc.roundedRect(10,8,190,36,5,5); doc.setDrawColor(210,210,214); doc.line(10,44,200,44);
+ // Píldora registrador estilo Apple
+ const regTxt='Registro: ' + registrador;
+ doc.setFont('helvetica','bold'); doc.setFontSize(8);
+ const regW=Math.min(52, doc.getTextWidth(regTxt)+8);
+ doc.setFillColor(245,246,247); doc.roundedRect(14,12,regW,8,4,4,'F');
+ doc.setDrawColor(225,226,230); doc.roundedRect(14,12,regW,8,4,4);
+ doc.setTextColor(90,94,100); doc.text(regTxt, 18, 17);
+
  doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(40,40,40); doc.text('CODE', 195, 14, { align: 'right' });
  doc.setFont('helvetica','bold'); doc.setFontSize(18);
  const full = 'XPO LOGISTICS'; const xpoPart = 'XPO '; const startX = 105 - (doc.getTextWidth(full) / 2);
